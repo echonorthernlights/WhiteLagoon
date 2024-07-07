@@ -22,19 +22,29 @@ namespace WhiteLagoon.Web.Controllers
             var villa = context.Villas.Find(id);
             return View(villa);
         }
-
-        [HttpDelete]
+        [HttpGet]
         public IActionResult Delete(int id)
         {
             var villa = context.Villas.Find(id);
-            if(villa != null)
+            if (villa is null)
             {
-                context.Villas.Remove(villa);
+                return NotFound();
 
             }
-            
+             return View(villa);
+        }
+        [HttpPost]
+        public IActionResult Delete(Villa villa)
+        {   
+            var villaFromDb = context.Villas.Find(villa.Id);
+            if (villaFromDb is not null)
+            {
+                context.Villas.Remove(villaFromDb);
+                context.SaveChanges();
+                return RedirectToAction("Index");
+            }
 
-            return RedirectToAction("Index");
+            return NotFound();
         }
 
         public IActionResult Create()
@@ -54,9 +64,39 @@ namespace WhiteLagoon.Web.Controllers
             {
                 context.Villas.Add(villa);
                 context.SaveChanges();
+                TempData["success"] = "Villa created successfully.";
                 return RedirectToAction("Index", "Villa");
             }
             return View(villa);
         }
+
+        [HttpGet]
+        public IActionResult Update(int id)
+        {
+            var villa = context.Villas.Find(id);
+            if (villa is null)
+            {
+                return RedirectToAction("Error", "Home");
+
+            }
+            return View(villa);
+        }
+
+        [HttpPost]
+        public IActionResult Update(Villa villa)
+        {
+            if (villa.Name == villa.Description)
+            {
+                ModelState.AddModelError("Name", "The name and description cannot match");
+            }
+            if (ModelState.IsValid && villa is not null)
+            {
+                context.Villas.Update(villa);
+                context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View();
+        }
+
     }
 }
