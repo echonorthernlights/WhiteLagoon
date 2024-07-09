@@ -14,40 +14,57 @@ namespace WhiteLagoon.Web.Controllers
         {
             this.context = context;   
         }
+
         public IActionResult Index()
         {
             var villasNumbers = context.VillaNumbers.Include(v=>v.Villa).ToList();
             return View(villasNumbers);
         }
 
-        //public IActionResult Details(int id)
-        //{
-        //    var villa = context.Villas.Find(id);
-        //    return View(villa);
-        //}
-        [HttpGet]
+
+
         public IActionResult Delete(int id)
         {
-            var villa = context.Villas.Find(id);
-            if (villa is null)
+        VillaNumberViewModel obj = new()
             {
-                return NotFound();
+                VillaList = context.Villas.ToList().Select(vn => new SelectListItem
+                {
+                    Text = vn.Name,
+                    Value = vn.Id.ToString()
+                }),
+                villaNumber = context.VillaNumbers.FirstOrDefault(u => u.Villa_Number == id)
+            };
+
+
+
+            if (obj.villaNumber is null)
+            {
+                return RedirectToAction("Error", "Home");
 
             }
-             return View(villa);
+            return View(obj);
         }
+
         [HttpPost]
-        public IActionResult Delete(Villa villa)
-        {   
-            var villaFromDb = context.Villas.Find(villa.Id);
-            if (villaFromDb is not null)
+        public IActionResult Delete(VillaNumberViewModel obj)
+        {
+            // ModelState.Remove("Villa");
+
+            if (ModelState.IsValid)
             {
-                context.Villas.Remove(villaFromDb);
+                context.VillaNumbers.Remove(obj.villaNumber);
                 context.SaveChanges();
-                return RedirectToAction("Index");
+                TempData["success"] = "Villa number deleted successfully.";
+                return RedirectToAction("Index", "VillaNumber");
             }
 
-            return NotFound();
+            obj.VillaList = context.Villas.ToList().Select(v => new SelectListItem
+            {
+                Text = v.Name,
+                Value = v.Id.ToString()
+            });
+            return View(obj);
+
         }
         [HttpGet]
         public IActionResult Create()
@@ -74,7 +91,7 @@ namespace WhiteLagoon.Web.Controllers
             {
                 context.VillaNumbers.Add(obj.villaNumber);
                 context.SaveChanges();
-                TempData["success"] = "Villa created successfully.";
+                TempData["success"] = "Villa number created successfully.";
                 return RedirectToAction("Index", "VillaNumber");
             }
             if (VillaNumberExists)
@@ -92,29 +109,45 @@ namespace WhiteLagoon.Web.Controllers
         [HttpGet]
         public IActionResult Update(int id)
         {
-            var villa = context.Villas.Find(id);
-            if (villa is null)
+            VillaNumberViewModel obj = new()
+            {
+                VillaList = context.Villas.ToList().Select(vn => new SelectListItem
+                {
+                    Text=vn.Name,
+                    Value = vn.Id.ToString()
+                }),
+               villaNumber = context.VillaNumbers.FirstOrDefault(u => u.Villa_Number == id)
+            };
+
+            
+
+            if (obj.villaNumber is null)
             {
                 return RedirectToAction("Error", "Home");
 
             }
-            return View(villa);
+            return View(obj);
         }
 
         [HttpPost]
-        public IActionResult Update(Villa villa)
+        public IActionResult Update(VillaNumberViewModel obj)
         {
-            if (villa.Name == villa.Description)
+            // ModelState.Remove("Villa");
+           
+            if (ModelState.IsValid )
             {
-                ModelState.AddModelError("Name", "The name and description cannot match");
-            }
-            if (ModelState.IsValid && villa is not null)
-            {
-                context.Villas.Update(villa);
+                context.VillaNumbers.Update(obj.villaNumber);
                 context.SaveChanges();
-                return RedirectToAction("Index");
+                TempData["success"] = "Villa number updated successfully.";
+                return RedirectToAction("Index", "VillaNumber");
             }
-            return View();
+
+            obj.VillaList = context.Villas.ToList().Select(v => new SelectListItem
+            {
+                Text = v.Name,
+                Value = v.Id.ToString()
+            });
+            return View(obj);
         }
 
     }
