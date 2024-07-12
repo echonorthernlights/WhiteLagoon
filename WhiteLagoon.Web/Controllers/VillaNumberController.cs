@@ -96,7 +96,7 @@ namespace WhiteLagoon.Web.Controllers
             }
             if (VillaNumberExists)
             {
-                TempData["error"] = "This villa number exists for this Villa";
+                TempData["error"] = "This villa number exists already";
             }
             obj.VillaList = context.Villas.ToList().Select(v => new SelectListItem
             {
