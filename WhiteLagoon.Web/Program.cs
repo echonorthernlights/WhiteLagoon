@@ -9,8 +9,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddScoped<IVillaRepository, VillaRepository>();
-builder.Services.AddScoped<IVillaNumberRepository, VillaNumberRepository>();
+//instead of registering multiple repositories we use a uint of work, which is a wrapper that wraps repositories.
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+//builder.Services.AddScoped<IVillaRepository, VillaRepository>();
+//builder.Services.AddScoped<IVillaNumberRepository, VillaNumberRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
