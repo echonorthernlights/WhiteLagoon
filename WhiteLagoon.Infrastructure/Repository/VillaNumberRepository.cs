@@ -11,61 +11,56 @@ using WhiteLagoon.Infrastructure.Data;
 
 namespace WhiteLagoon.Infrastructure.Repository
 {
-    public class VillaNumberRepository : IVillaNumberRepository
+    public class VillaNumberRepository : Repository<VillaNumber>, IVillaNumberRepository
     {
         private readonly ApplicationDbContext context;
         internal DbSet<VillaNumber> dbSet;
-        public VillaNumberRepository(ApplicationDbContext context)
+        public VillaNumberRepository(ApplicationDbContext context) : base(context)
         {
             this.context = context;
             dbSet = this.context.Set<VillaNumber>();
         }
 
-        public void Add(VillaNumber entity)
-        {
-            dbSet.Add(entity);
-        }
+        //public void Add(VillaNumber entity)
+        //{
+        //    dbSet.Add(entity);
+        //}
 
-        public VillaNumber Get(Expression<Func<VillaNumber, bool>> filter, string? includeProperties = null)
-        {
-            IQueryable<VillaNumber> query = dbSet;
-            if (filter is not null)
-            {
-                query = query.Where(filter);
-            }
-            if (!string.IsNullOrEmpty(includeProperties))
-            {
-                foreach (var property in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries) ){
-                    query = query.Include(property);
-                }
-            }
-            return query.FirstOrDefault();
-        }
+        //public VillaNumber Get(Expression<Func<VillaNumber, bool>> filter, string? includeProperties = null)
+        //{
+        //    IQueryable<VillaNumber> query = dbSet;
+        //    if (filter is not null)
+        //    {
+        //        query = query.Where(filter);
+        //    }
+        //    if (!string.IsNullOrEmpty(includeProperties))
+        //    {
+        //        foreach (var property in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries) ){
+        //            query = query.Include(property);
+        //        }
+        //    }
+        //    return query.FirstOrDefault();
+        //}
 
-        public IEnumerable<VillaNumber> GetAll(Expression<Func<VillaNumber, bool>>? filter = null, string? includeProperties = null)
-        {
-            IQueryable<VillaNumber> query =dbSet;
-            if (filter is not null) { 
-                query = query.Where(filter);
-            }
-            if (!string.IsNullOrEmpty(includeProperties)) {
-                foreach (var property in includeProperties.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries)) {
-                    query = query.Include(property);
-                }
-            }
-                return query.ToList();
-
-            }  
-
+        //public IEnumerable<VillaNumber> GetAll(Expression<Func<VillaNumber, bool>>? filter = null, string? includeProperties = null)
+        //{
+        //    IQueryable<VillaNumber> query =dbSet;
+        //    if (filter is not null) { 
+        //        query = query.Where(filter);
+        //    }
+        //    if (!string.IsNullOrEmpty(includeProperties)) {
+        //        foreach (var property in includeProperties.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries)) {
+        //            query = query.Include(property);
+        //        }
+        //    }
+        //        return query.ToList();
+        //    }  
 
 
-
-           
-
-        public void Remove(VillaNumber entity)
-        {
-            dbSet.Remove(entity);
-        }
+        //public void Remove(VillaNumber entity)
+        //{
+        //    dbSet.Remove(entity);
+        //}
 
         public void Save()
         {
