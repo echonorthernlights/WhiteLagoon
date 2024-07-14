@@ -1,23 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using WhiteLagoon.Application.Common.Interfaces;
 using WhiteLagoon.Domain.Entities;
-using WhiteLagoon.Infrastructure.Data;
 using WhiteLagoon.Web.ViewModels;
 
 namespace WhiteLagoon.Web.Controllers
 {
     public class VillaNumberController : Controller
     {
-        private readonly ApplicationDbContext context;
-        public VillaNumberController(ApplicationDbContext context)
-        {
-            this.context = context;   
-        }
+       private readonly IVillaNumberRepository villaNumberRepository;
+       private readonly IVillaRepository villaRepository;
 
+        public VillaNumberController(IVillaNumberRepository villaNumberRepository, IVillaRepository villaRepository)
+        {
+            this.villaNumberRepository = villaNumberRepository;
+            this.villaRepository = villaRepository;
+            
+        }
         public IActionResult Index()
         {
-            var villasNumbers = context.VillaNumbers.Include(v=>v.Villa).ToList();
+            var villasNumbers = villaNumberRepository.GetAll(null, "Villa");
+
             return View(villasNumbers);
         }
 
@@ -25,14 +29,14 @@ namespace WhiteLagoon.Web.Controllers
 
         public IActionResult Delete(int id)
         {
-        VillaNumberViewModel obj = new()
+            VillaNumberViewModel obj = new()
             {
-                VillaList = context.Villas.ToList().Select(vn => new SelectListItem
+                VillaList = villaNumberRepository.GetAll(null, "Villa").Select(vn => new SelectListItem
                 {
-                    Text = vn.Name,
-                    Value = vn.Id.ToString()
+                    Text = vn.Villa.Name,
+                    Value = vn.Villa.Id.ToString()
                 }),
-                villaNumber = context.VillaNumbers.FirstOrDefault(u => u.Villa_Number == id)
+                villaNumber = villaNumberRepository.Get(u => u.Villa_Number == id)
             };
 
 
@@ -52,13 +56,13 @@ namespace WhiteLagoon.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                context.VillaNumbers.Remove(obj.villaNumber);
-                context.SaveChanges();
+                villaNumberRepository.Remove(obj.villaNumber);
+                villaNumberRepository.Save();
                 TempData["success"] = "Villa number deleted successfully.";
                 return RedirectToAction("Index", "VillaNumber");
             }
 
-            obj.VillaList = context.Villas.ToList().Select(v => new SelectListItem
+            obj.VillaList = villaRepository.GetAll().Select(v => new SelectListItem
             {
                 Text = v.Name,
                 Value = v.Id.ToString()
@@ -71,26 +75,27 @@ namespace WhiteLagoon.Web.Controllers
         {
             VillaNumberViewModel VillaNumberVM = new()
             {
-                VillaList = context.Villas.ToList().Select(v => new SelectListItem
+                VillaList = villaRepository.GetAll().Select(v => new SelectListItem
                 {
                     Text = v.Name,
                     Value = v.Id.ToString()
                 })
             };
-    
+
             return View(VillaNumberVM);
         }
 
         [HttpPost]
-        public IActionResult Create(VillaNumberViewModel obj) {
+        public IActionResult Create(VillaNumberViewModel obj)
+        {
 
             // ModelState.Remove("Villa");
-            bool VillaNumberExists = context.VillaNumbers.Any(u =>  u.Villa_Number == obj.villaNumber.Villa_Number);
-            
+            bool VillaNumberExists = villaNumberRepository.GetAll(null, "Villa").Any(u => u.Villa_Number == obj.villaNumber.Villa_Number);
+
             if (ModelState.IsValid && !VillaNumberExists)
             {
-                context.VillaNumbers.Add(obj.villaNumber);
-                context.SaveChanges();
+                villaNumberRepository.Add(obj.villaNumber);
+                villaNumberRepository.Save();
                 TempData["success"] = "Villa number created successfully.";
                 return RedirectToAction("Index", "VillaNumber");
             }
@@ -98,10 +103,10 @@ namespace WhiteLagoon.Web.Controllers
             {
                 TempData["error"] = "This villa number exists already";
             }
-            obj.VillaList = context.Villas.ToList().Select(v => new SelectListItem
+            obj.VillaList = villaNumberRepository.GetAll(null,"Villa").Select(v => new SelectListItem
             {
-                Text = v.Name,
-                Value = v.Id.ToString()
+                Text = v.Villa.Name,
+                Value = v.Villa.Id.ToString()
             });
             return View(obj);
         }
@@ -111,15 +116,15 @@ namespace WhiteLagoon.Web.Controllers
         {
             VillaNumberViewModel obj = new()
             {
-                VillaList = context.Villas.ToList().Select(vn => new SelectListItem
+                VillaList = villaRepository.GetAll().Select(vn => new SelectListItem
                 {
-                    Text=vn.Name,
+                    Text = vn.Name,
                     Value = vn.Id.ToString()
                 }),
-               villaNumber = context.VillaNumbers.FirstOrDefault(u => u.Villa_Number == id)
+                villaNumber = villaNumberRepository.Get(u => u.Villa_Number == id)
             };
 
-            
+
 
             if (obj.villaNumber is null)
             {
@@ -133,16 +138,16 @@ namespace WhiteLagoon.Web.Controllers
         public IActionResult Update(VillaNumberViewModel obj)
         {
             // ModelState.Remove("Villa");
-           
-            if (ModelState.IsValid )
+
+            if (ModelState.IsValid)
             {
-                context.VillaNumbers.Update(obj.villaNumber);
-                context.SaveChanges();
+                villaNumberRepository.Update(obj.villaNumber);
+                villaNumberRepository.Save();
                 TempData["success"] = "Villa number updated successfully.";
                 return RedirectToAction("Index", "VillaNumber");
             }
 
-            obj.VillaList = context.Villas.ToList().Select(v => new SelectListItem
+            obj.VillaList = villaRepository.GetAll().Select(v => new SelectListItem
             {
                 Text = v.Name,
                 Value = v.Id.ToString()
@@ -151,4 +156,4 @@ namespace WhiteLagoon.Web.Controllers
         }
 
     }
-}
+    }
