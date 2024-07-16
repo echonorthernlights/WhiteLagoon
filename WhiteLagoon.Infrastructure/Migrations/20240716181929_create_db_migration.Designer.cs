@@ -12,8 +12,8 @@ using WhiteLagoon.Infrastructure.Data;
 namespace WhiteLagoon.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240708142701_VillaNumber_Migration")]
-    partial class VillaNumber_Migration
+    [Migration("20240716181929_create_db_migration")]
+    partial class create_db_migration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,34 @@ namespace WhiteLagoon.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("WhiteLagoon.Domain.Entities.Amenity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("VillaId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("tt")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("VillaId");
+
+                    b.ToTable("Amenities");
+                });
 
             modelBuilder.Entity("WhiteLagoon.Domain.Entities.Villa", b =>
                 {
@@ -159,6 +187,17 @@ namespace WhiteLagoon.Infrastructure.Migrations
                             Villa_Number = 302,
                             VillaId = 3
                         });
+                });
+
+            modelBuilder.Entity("WhiteLagoon.Domain.Entities.Amenity", b =>
+                {
+                    b.HasOne("WhiteLagoon.Domain.Entities.Villa", "Villa")
+                        .WithMany()
+                        .HasForeignKey("VillaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Villa");
                 });
 
             modelBuilder.Entity("WhiteLagoon.Domain.Entities.VillaNumber", b =>
