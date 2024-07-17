@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace WhiteLagoon.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class create_db_migration : Migration
+    public partial class db_create_migration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -42,8 +42,7 @@ namespace WhiteLagoon.Infrastructure.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
-                    VillaId = table.Column<int>(type: "integer", nullable: false),
-                    tt = table.Column<string>(type: "text", nullable: true)
+                    VillaId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -83,6 +82,24 @@ namespace WhiteLagoon.Infrastructure.Migrations
                     { 1, null, "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.", "https://placehold.co/600x400", "Royal Villa", 4, 200.0, 550, null },
                     { 2, null, "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.", "https://placehold.co/600x401", "Premium Pool Villa", 4, 300.0, 550, null },
                     { 3, null, "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.", "https://placehold.co/600x402", "Luxury Pool Villa", 4, 400.0, 750, null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Amenities",
+                columns: new[] { "Id", "Description", "Name", "VillaId" },
+                values: new object[,]
+                {
+                    { 1, null, "Private Pool", 1 },
+                    { 2, null, "Microwave", 1 },
+                    { 3, null, "Private Balcony", 1 },
+                    { 4, null, "1 king bed and 1 sofa bed", 1 },
+                    { 5, null, "Private Plunge Pool", 2 },
+                    { 6, null, "Microwave and Mini Refrigerator", 2 },
+                    { 7, null, "Private Balcony", 2 },
+                    { 8, null, "king bed or 2 double beds", 2 },
+                    { 9, null, "Private Pool", 3 },
+                    { 10, null, "Jacuzzi", 3 },
+                    { 11, null, "Private Balcony", 3 }
                 });
 
             migrationBuilder.InsertData(

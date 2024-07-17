@@ -16,7 +16,7 @@
 <div class="card-body border p-4">
     <div class="row pb-3">
         <div class="col-6 offset-6 text-end">
-            <a class="btn btn-secondary" asp-controller="Villa" asp-action="Create"><i class="bi bi-plus-circle"></i> Add New Villa</a>
+            <a class="btn btn-secondary" asp-controller="Amenity" asp-action="Create"><i class="bi bi-plus-circle"></i> Add New Amenity</a>
         </div>
     </div>
     <table class="table table-bordered table-striped">
@@ -24,6 +24,9 @@
             <tr>
                 <th>
                     Name
+                </th>
+                <th>
+                    Villa Name
                 </th>
                 <th>
                     Description
@@ -37,6 +40,9 @@
                 <tr>
                     <td>
                         @amenity.Name
+                    </td>
+                    <td>
+                        @amenity.Villa?.Name
                     </td>
                     <td>
                         @amenity.Description

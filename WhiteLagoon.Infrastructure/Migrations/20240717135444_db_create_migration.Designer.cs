@@ -12,8 +12,8 @@ using WhiteLagoon.Infrastructure.Data;
 namespace WhiteLagoon.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240716181929_create_db_migration")]
-    partial class create_db_migration
+    [Migration("20240717135444_db_create_migration")]
+    partial class db_create_migration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,14 +43,79 @@ namespace WhiteLagoon.Infrastructure.Migrations
                     b.Property<int>("VillaId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("tt")
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
 
                     b.HasIndex("VillaId");
 
                     b.ToTable("Amenities");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Private Pool",
+                            VillaId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Microwave",
+                            VillaId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Private Balcony",
+                            VillaId = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "1 king bed and 1 sofa bed",
+                            VillaId = 1
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Private Plunge Pool",
+                            VillaId = 2
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Microwave and Mini Refrigerator",
+                            VillaId = 2
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Private Balcony",
+                            VillaId = 2
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "king bed or 2 double beds",
+                            VillaId = 2
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "Private Pool",
+                            VillaId = 3
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "Jacuzzi",
+                            VillaId = 3
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Name = "Private Balcony",
+                            VillaId = 3
+                        });
                 });
 
             modelBuilder.Entity("WhiteLagoon.Domain.Entities.Villa", b =>
