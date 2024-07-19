@@ -27,11 +27,20 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
-builder.Services.ConfigureApplicationCookie(options =>
+
+// Configure application cookie
+//builder.Services.ConfigureApplicationCookie(options =>
+//{
+//    options.AccessDeniedPath = "/Account/AccessDenied";
+//    options.LogoutPath = "/Abbount/Logout";
+//    options.LoginPath = "/Account/Login";
+//});
+
+//Cofigure password validation
+builder.Services.Configure<IdentityOptions>(options =>
 {
-    options.AccessDeniedPath = "/Account/AccessDenied";
-    options.LogoutPath = "/Abbount/Logout";
-    options.LoginPath = "/Account/Login";
+    options.Password.RequireUppercase = false;
+    options.Password.RequiredLength = 5;
 });
 var app = builder.Build();
 
