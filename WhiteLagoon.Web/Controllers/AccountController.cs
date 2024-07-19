@@ -33,8 +33,27 @@ namespace WhiteLagoon.Web.Controllers
             return View(loginViewModel);
         }
         [HttpPost]
-        public IActionResult Login(LoginViewModel loginViewModel)
+        public async Task<IActionResult> Login(LoginViewModel loginViewModel)
         {
+            if (ModelState.IsValid)
+            {
+                var result = await signInManager.PasswordSignInAsync(loginViewModel.Email, loginViewModel.Password, loginViewModel.RememberMe, lockoutOnFailure:false);
+                if (result.Succeeded)
+                {
+                    if (string.IsNullOrEmpty(loginViewModel.RedirectUrl))
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }   
+                    else
+                    {
+                        return LocalRedirect(loginViewModel.RedirectUrl);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Invalid login atteempt");
+                }
+            }
             return View(loginViewModel);
         }
 
