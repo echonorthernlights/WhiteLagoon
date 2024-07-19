@@ -27,7 +27,12 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
-
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.AccessDeniedPath = "/Account/AccessDenied";
+    options.LogoutPath = "/Abbount/Logout";
+    options.LoginPath = "/Account/Login";
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
