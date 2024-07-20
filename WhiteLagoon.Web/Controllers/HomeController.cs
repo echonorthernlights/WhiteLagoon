@@ -17,32 +17,34 @@ namespace WhiteLagoon.Web.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            HomeViewModel model = new(){
+            HomeViewModel model = new()
+            {
                 VillaList = unitOfWork.Villa.GetAll(includeProperties: "VillaAmenities"),
-                Nights=1,
+                Nights = 1,
                 CheckInDate = DateOnly.FromDateTime(DateTime.Now),
 
             };
             return View(model);
         }
 
+        //[HttpPost]
+        //public IActionResult Index(HomeViewModel model)
+        //{
+        //    model.VillaList = unitOfWork.Villa.GetAll(includeProperties: "VillaAmenities");
+        //    foreach (var villa in model.VillaList)
+        //    {
+        //        if (villa.Id % 2 == 0)
+        //        {
+        //            villa.IsAvailable = false;
+        //        }
+        //    }
+        //    return View(model);
+        //}
+
         [HttpPost]
-        public IActionResult Index(HomeViewModel model)
-        {
-            model.VillaList = unitOfWork.Villa.GetAll(includeProperties: "VillaAmenities");
-            foreach (var villa in model.VillaList)
-            {
-                if (villa.Id % 2 == 0)
-                {
-                    villa.IsAvailable = false;
-                }
-            }
-            return View(model);
-        }
-
-
         public IActionResult GetVillasByDate(int nights, DateOnly checkInDate)
         {
+            //Thread.Sleep(2000);
             var VillaList = unitOfWork.Villa.GetAll(includeProperties: "VillaAmenities").ToList();
             foreach (var villa in VillaList)
             {

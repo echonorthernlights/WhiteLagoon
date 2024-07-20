@@ -19,6 +19,8 @@ namespace WhiteLagoon.Infrastructure.Data
         public DbSet<VillaNumber> VillaNumbers { get; set; }
         public DbSet<Amenity> Amenities { get; set; }
 
+        public DbSet<Booking> Bookings { get; set; }
+
         //wont create a new table, it will alter AspNetUser since ApplicationUser extends IdentityUser
         DbSet<ApplicationUser>? ApplicationUsers { get; set; }
 
