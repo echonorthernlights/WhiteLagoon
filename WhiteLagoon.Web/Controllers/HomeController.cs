@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using WhiteLagoon.Application.Common.Interfaces;
+using WhiteLagoon.Application.Common.Utility;
 using WhiteLagoon.Web.Models;
 using WhiteLagoon.Web.ViewModels;
 
@@ -12,7 +13,7 @@ namespace WhiteLagoon.Web.Controllers
 
         public HomeController(IUnitOfWork unitOfWorkr)
         {
-            this.unitOfWork = unitOfWorkr; 
+            this.unitOfWork = unitOfWorkr;
         }
         [HttpGet]
         public IActionResult Index()
@@ -46,12 +47,13 @@ namespace WhiteLagoon.Web.Controllers
         {
             //Thread.Sleep(2000);
             var VillaList = unitOfWork.Villa.GetAll(includeProperties: "VillaAmenities").ToList();
+            var VillaNumbersList = unitOfWork.VillaNumber.GetAll().ToList();
+            var BookedVillas = unitOfWork.Booking.GetAll(b => b.Status == SD.StatusApproved || b.Status == SD.StatusCheckedIn).ToList();
+
             foreach (var villa in VillaList)
             {
-                if (villa.Id % 2 == 0)
-                {
-                    villa.IsAvailable = false;
-                }
+                int roomAvailable = SD.VillaRoomsAvailable_Count(villa.Id, VillaNumbersList, checkInDate, nights, BookedVillas);
+                villa.IsAvailable = roomAvailable > 0 ? true : false;
             }
             HomeViewModel homeViewModel = new()
             {
