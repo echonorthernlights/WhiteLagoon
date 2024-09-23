@@ -23,11 +23,12 @@ namespace WhiteLagoon.Infrastructure.Repository
         {
             context.Bookings.Update(entity);
         }
-        public void UpdateStatus(int bookingId, string orderStatus) {
+        public void UpdateStatus(int bookingId, string orderStatus, int villaNumber=0) {
         var bookingFromDb = context.Bookings.FirstOrDefault(b => b.Id == bookingId);
             if (bookingFromDb != null) { 
                 bookingFromDb.Status = orderStatus;
                 if (bookingFromDb.Status == SD.StatusCheckedIn) {
+                    bookingFromDb.VillaNumber = villaNumber;
                     bookingFromDb.ActualCheckInDate = DateTime.UtcNow;
                 }
                 if (bookingFromDb.Status == SD.StatusCompleted)

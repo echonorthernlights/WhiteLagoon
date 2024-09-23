@@ -111,7 +111,7 @@ namespace WhiteLagoon.Web.Controllers
                 var session = service.Get(booking.StripeSessionId);
 
                 if (session.PaymentStatus == "paid") {
-                    unitOfWork.Booking.UpdateStatus(booking.Id, SD.StatusApproved);
+                    unitOfWork.Booking.UpdateStatus(booking.Id, SD.StatusApproved, 0);
                     unitOfWork.Booking.UpdateStripePaymentId(booking.Id, session.Id, session.PaymentIntentId);
                     unitOfWork.Save();
                 }
@@ -122,8 +122,15 @@ namespace WhiteLagoon.Web.Controllers
         [Authorize]
         public IActionResult BookingDetails(int bookingId) {
 
-            var bookinDetails = unitOfWork.Booking.Get(b => b.Id == bookingId, includeProperties: "User,Villa");
-            return View(bookinDetails);
+            var bookingDetails = unitOfWork.Booking.Get(b => b.Id == bookingId, includeProperties: "User,Villa");
+
+            if(bookingDetails.VillaNumber == 0 && bookingDetails.Status == SD.StatusApproved)
+            {
+                var availableVillaNumber = AssignAvailableVillaNumberByVilla(bookingDetails.VillaId);
+                bookingDetails.VillaNumbers = unitOfWork.VillaNumber.GetAll(u => u.VillaId == bookingDetails.VillaId && availableVillaNumber.Any(x => x == u.Villa_Number)).ToList();
+            }
+
+            return View(bookingDetails);
         }
         #region API Calls
         [HttpGet]
@@ -149,7 +156,20 @@ namespace WhiteLagoon.Web.Controllers
             return Json(new { data = objBookings });
            
         }
+        private List<int> AssignAvailableVillaNumberByVilla(int villaId) {
+            List<int> availableVillaNumbers = new();
+            var villaNumbers = unitOfWork.VillaNumber.GetAll(v=>v.VillaId == villaId);
+            var checkedInVillas = unitOfWork.Booking.GetAll(b => b.VillaId == villaId && b.Status == SD.StatusCheckedIn)
+                .Select(b=>b.VillaNumber);
 
+            foreach (var villaNumber in villaNumbers) {
+                if (!checkedInVillas.Contains(villaNumber.Villa_Number)) { 
+                    availableVillaNumbers.Add(villaNumber.Villa_Number);
+                }
+            }
+            return availableVillaNumbers;
+
+        }
         #endregion
     }
 }
