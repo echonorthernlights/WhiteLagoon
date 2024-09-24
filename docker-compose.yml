@@ -13,6 +13,8 @@ services:
       dockerfile: dockerfile
     environment:
       - ASPNETCORE_URLS=http://+:80
+    volumes:
+      - ./wwwroot/images:/app/wwwroot/images  
     networks:
       - dev
   whitelagoon_db:
