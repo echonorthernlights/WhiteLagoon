@@ -16,7 +16,7 @@ RUN dotnet restore ./WhiteLagoon.Web/WhiteLagoon.Web.csproj
 COPY . .
 
 # Publish the application
-RUN dotnet publish -c Release -o out ./WhiteLagoon.sln/WhiteLagoon.Web.csproj /v:d
+RUN dotnet publish -c Release -o out ./WhiteLagoon.Web/WhiteLagoon.Web.csproj /v:d
 
 # Create the final image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final-env
