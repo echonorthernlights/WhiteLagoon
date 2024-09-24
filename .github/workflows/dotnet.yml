@@ -11,10 +11,7 @@ on:
 
 jobs:
   build:
-    runs-on: ${{matrix.os}}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
@@ -26,3 +23,14 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build --no-restore
+      - name: Build and push Docker Image
+      - name: Build
+        id: build
+        uses: cloudposse/github-action-docker-build-push@main
+        with:
+          registry: registry.hub.docker.com
+          organization: "aelhassani/whitelagoon"
+          repository: "aelhassani/whitelagoon"
+          login: "aelhassani"
+          password: "Root__2023"
+          platforms: linux/amd64,linux/arm64
