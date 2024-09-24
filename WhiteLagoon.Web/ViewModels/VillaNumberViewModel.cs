@@ -6,7 +6,8 @@ namespace WhiteLagoon.Web.ViewModels
 {
     public class VillaNumberViewModel
     {
-        public VillaNumber? villaNumber { get; set; }
+        public VillaNumber villaNumber { get; set; } = new VillaNumber();
+
         [ValidateNever]
         public IEnumerable<SelectListItem>? VillaList { get; set; }
     }

@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WhiteLagoon.Domain.Entities
 {
@@ -14,19 +11,19 @@ namespace WhiteLagoon.Domain.Entities
         public int Id { get; set; }
 
         [Required]
-        public string UserId { get; set; }
+        public string UserId { get; set; } = string.Empty;
         [ForeignKey("UserId")]
-        public ApplicationUser User { get; set; }
+        public ApplicationUser User { get; set; } = null!;
 
         [Required]
         public int VillaId { get; set; }
         [ForeignKey("VillaId")]
-        public Villa Villa { get; set; }
+        public Villa Villa { get; set; } = null!;
 
         [Required]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         [Required]
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
         public string? Phone { get; set; }
 
         [Required]
@@ -53,7 +50,6 @@ namespace WhiteLagoon.Domain.Entities
         public int VillaNumber { get; set; }
 
         [NotMapped]
-        public List<VillaNumber> VillaNumbers { get; set; }
-
+        public List<VillaNumber> VillaNumbers { get; set; } = new List<VillaNumber>();
     }
 }
