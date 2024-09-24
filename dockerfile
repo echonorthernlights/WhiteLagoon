@@ -1,5 +1,5 @@
 # Use the .NET SDK image for building the application
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:8.0.401 AS build-env
 WORKDIR /app
 
 # Copy all project files
