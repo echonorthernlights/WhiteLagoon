@@ -2,7 +2,8 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0.401 AS build-env
 WORKDIR /app
 
-# Copy all project files
+# Copy the entire solution file
+COPY ./WhiteLagoon.sln ./
 COPY ./WhiteLagoon.Application/*.csproj ./WhiteLagoon.Application/
 COPY ./WhiteLagoon.Domain/*.csproj ./WhiteLagoon.Domain/
 COPY ./WhiteLagoon.Infrastructure/*.csproj ./WhiteLagoon.Infrastructure/
