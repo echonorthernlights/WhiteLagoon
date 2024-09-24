@@ -131,6 +131,7 @@ namespace WhiteLagoon.Web.Controllers
                 {
                     string fileName = Guid.NewGuid().ToString() + Path.GetExtension(villa.Image.FileName);
                     //string imagePath = Path.Combine(webHostEnvironment.WebRootPath, @"images\Villa");
+                    //string imagePath = Path.Combine(webHostEnvironment.WebRootPath, @"images\Villa");
                     string imagePath = Path.Combine(webHostEnvironment.WebRootPath, "images", "Villa");
                     if (!string.IsNullOrEmpty(villa.ImageUrl))
                     {
