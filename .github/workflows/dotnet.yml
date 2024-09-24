@@ -20,7 +20,7 @@ jobs:
         with:
           dotnet-version: 8.0.x
       - name: Restore dependencies
-        run: dotnet restore ./WhiteLagoon.Web/WhiteLagoon.Web.csproj
+        run: dotnet restore ./WhiteLagoon.sln
       - name: Build
         run: dotnet build --no-restore
       - name: Build and push Docker Image
