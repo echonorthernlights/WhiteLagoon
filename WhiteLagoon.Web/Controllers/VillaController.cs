@@ -7,15 +7,15 @@ using WhiteLagoon.Domain.Entities;
 namespace WhiteLagoon.Web.Controllers
 {
     [Authorize]
-   public class VillaController : Controller
+    public class VillaController : Controller
     {
         //private readonly IVillaRepository villaRepository;
         private readonly IUnitOfWork unitOfWork;
         private readonly IWebHostEnvironment webHostEnvironment;
         public VillaController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
         {
-            this.unitOfWork = unitOfWork;   
-            this.webHostEnvironment = webHostEnvironment;   
+            this.unitOfWork = unitOfWork;
+            this.webHostEnvironment = webHostEnvironment;
         }
         public IActionResult Index()
         {
@@ -38,11 +38,11 @@ namespace WhiteLagoon.Web.Controllers
                 return NotFound();
 
             }
-             return View(villa);
+            return View(villa);
         }
         [HttpPost]
         public IActionResult Delete(Villa villa)
-        {   
+        {
             var villaFromDb = unitOfWork.Villa.Get(v => v.Id == villa.Id);
             if (villaFromDb is not null)
             {
@@ -64,28 +64,35 @@ namespace WhiteLagoon.Web.Controllers
 
         public IActionResult Create()
         {
-           
+
             return View();
         }
 
         [HttpPost]
-        public IActionResult Create(Villa villa) {
+        public IActionResult Create(Villa villa)
+        {
 
-            if(villa.Name == villa.Description)
+            if (villa.Name == villa.Description)
             {
                 ModelState.AddModelError("Name", "The name and description cannot match");
             }
             if (ModelState.IsValid)
             {
-                if(villa.Image is not null)
+                if (villa.Image is not null)
                 {
-                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(villa.Image.FileName);
-                    string imagePath = Path.Combine(webHostEnvironment.WebRootPath, @"images\Villa");
+                    //string imagePath = Path.Combine(webHostEnvironment.WebRootPath, @"images\Villa");
+                    // Using Path.Combine for cross-platform compatibility
+                    string imagePath = Path.Combine(webHostEnvironment.WebRootPath, "images", "Villa");
 
-                    using var fileStream = new FileStream(Path.Combine(imagePath, fileName), FileMode.Create);
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(villa.Image.FileName);
+
+                    using var fileStream = new FileStream(Path.Combine(imagePath, fileName).Replace("\\", "/"), FileMode.Create);
                     villa.Image.CopyTo(fileStream);
 
-                    villa.ImageUrl = @"\images\Villa\" + fileName;
+                    //villa.ImageUrl = @"\images\Villa\" + fileName;
+                    villa.ImageUrl = $"/images/Villa/{fileName}";
+                    //villa.ImageUrl = Path.Combine("images", "Villa", fileName).Replace("\\", "/");
+
                 }
                 else
                 {
@@ -123,17 +130,21 @@ namespace WhiteLagoon.Web.Controllers
                 if (villa.Image is not null)
                 {
                     string fileName = Guid.NewGuid().ToString() + Path.GetExtension(villa.Image.FileName);
-                    string imagePath = Path.Combine(webHostEnvironment.WebRootPath, @"images\Villa");
-                    if (!string.IsNullOrEmpty(villa.ImageUrl)) {
+                    //string imagePath = Path.Combine(webHostEnvironment.WebRootPath, @"images\Villa");
+                    string imagePath = Path.Combine(webHostEnvironment.WebRootPath, "images", "Villa");
+                    if (!string.IsNullOrEmpty(villa.ImageUrl))
+                    {
                         string oldImagePath = Path.Combine(webHostEnvironment.WebRootPath, villa.ImageUrl.TrimStart('\\'));
-                        if (System.IO.File.Exists(oldImagePath)) {
+                        if (System.IO.File.Exists(oldImagePath))
+                        {
                             System.IO.File.Delete(oldImagePath);
                         }
                     }
-                    using var fileStream = new FileStream(Path.Combine(imagePath, fileName), FileMode.Create);
+                    using var fileStream = new FileStream(Path.Combine(imagePath, fileName).Replace("\\", "/"), FileMode.Create);
                     villa.Image.CopyTo(fileStream);
 
-                    villa.ImageUrl = @"\images\Villa\" + fileName;
+                    //villa.ImageUrl = @"\images\Villa\" + fileName;
+                    villa.ImageUrl = $"/images/Villa/{fileName}";
                 }
                 unitOfWork.Villa.Update(villa);
                 unitOfWork.Villa.Save();
