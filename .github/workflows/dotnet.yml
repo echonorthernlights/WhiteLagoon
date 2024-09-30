@@ -1,6 +1,3 @@
-# This workflow will build a .NET project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
-
 name: .NET
 
 on:
@@ -15,18 +12,24 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
+
       - name: Clear NuGet cache
         run: dotnet nuget locals all --clear
 
       - name: Restore dependencies
-        run: dotnet restore ./WhiteLagoon.sln
+        run: dotnet restore ./WhiteLagoon.sln -v diag
 
       - name: Build
-        run: dotnet build --no-restore
+        run: dotnet build --no-restore -v diag
+
+      - name: Publish
+        run: dotnet publish -c Release -o out ./WhiteLagoon.Web/WhiteLagoon.Web.csproj -v diag
+
       - name: Build and push Docker Image
         id: build
         uses: cloudposse/github-action-docker-build-push@main
@@ -34,6 +37,6 @@ jobs:
           registry: registry.hub.docker.com
           organization: "aelhassani/whitelagoon"
           repository: "aelhassani/whitelagoon"
-          login: "aelhassani"
+           login: "aelhassani"
           password: "Root__2023"
           platforms: linux/amd64,linux/arm64
