@@ -28,7 +28,7 @@ jobs:
         run: dotnet build --no-restore -v diag
 
       - name: Publish
-        run: dotnet publish -c Release -o out ./WhiteLagoon.Web/WhiteLagoon.Web.csproj -v diag
+        run: dotnet publish -c Release -o out /app/WhiteLagoon.Web/WhiteLagoon.Web.csproj
 
       - name: Build and push Docker Image
         id: build
