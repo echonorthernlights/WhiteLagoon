@@ -37,6 +37,6 @@ jobs:
           registry: registry.hub.docker.com
           organization: "aelhassani/whitelagoon"
           repository: "aelhassani/whitelagoon"
-           login: "aelhassani"
+          login: "aelhassani"
           password: "Root__2023"
           platforms: linux/amd64,linux/arm64
