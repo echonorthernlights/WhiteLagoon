@@ -35,8 +35,8 @@ jobs:
         uses: cloudposse/github-action-docker-build-push@main
         with:
           registry: registry.hub.docker.com
-          organization: "aelhassani/whitelagoon"
-          repository: "aelhassani/whitelagoon"
+          organization: "aelhassani"
+          repository: "whitelagoon"
           login: "aelhassani"
           password: "Root__2023"
           platforms: linux/amd64,linux/arm64
