@@ -10,7 +10,7 @@ COPY ./WhiteLagoon.Infrastructure/*.csproj ./WhiteLagoon.Infrastructure/
 COPY ./WhiteLagoon.Web/*.csproj ./WhiteLagoon.Web/
 
 # Restore dependencies with detailed logs
-RUN dotnet restore ./WhiteLagoon.Web/WhiteLagoon.Web.csproj -v diag
+RUN dotnet restore /app/WhiteLagoon.Web/WhiteLagoon.Web.csproj
 
 # Copy the entire application source code
 COPY . .
