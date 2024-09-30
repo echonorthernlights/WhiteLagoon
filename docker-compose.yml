@@ -14,7 +14,7 @@ services:
     environment:
       - ASPNETCORE_URLS=http://+:80
     volumes:
-      - ./wwwroot/images:/app/wwwroot/images  
+      - ./WhiteLagoon.Web/wwwroot/images:/app/wwwroot/images  
     networks:
       - dev
   whitelagoon_db:

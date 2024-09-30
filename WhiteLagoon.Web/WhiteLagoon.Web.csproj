@@ -35,5 +35,10 @@
   <ItemGroup>
     <None Include="wwwroot\js\booking.js" />
   </ItemGroup>
-
+  <ItemGroup>
+    <None Update="wwwroot\**\*">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+  </ItemGroup>
+  
 </Project>
