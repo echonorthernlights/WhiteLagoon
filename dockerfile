@@ -10,7 +10,7 @@ COPY ./WhiteLagoon.Infrastructure/*.csproj ./WhiteLagoon.Infrastructure/
 COPY ./WhiteLagoon.Web/*.csproj ./WhiteLagoon.Web/
 
 # Restore dependencies
-RUN dotnet restore ./WhiteLagoon.Web/WhiteLagoon.Web.csproj
+RUN dotnet restore ./WhiteLagoon.Web/WhiteLagoon.Web.csproj -v diag
 
 # Clear NuGet cache and restore dependencies
 RUN dotnet nuget locals all --clear && dotnet restore ./WhiteLagoon.Web/WhiteLagoon.Web.csproj || \
