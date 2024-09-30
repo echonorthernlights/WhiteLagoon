@@ -12,6 +12,10 @@ COPY ./WhiteLagoon.Web/*.csproj ./WhiteLagoon.Web/
 # Restore dependencies
 RUN dotnet restore ./WhiteLagoon.Web/WhiteLagoon.Web.csproj
 
+# Clear NuGet cache and restore dependencies
+RUN dotnet nuget locals all --clear && dotnet restore ./WhiteLagoon.Web/WhiteLagoon.Web.csproj || \
+    (sleep 5 && dotnet restore ./WhiteLagoon.Web/WhiteLagoon.Web.csproj)
+
 # Copy the entire application source code
 COPY . .
 
