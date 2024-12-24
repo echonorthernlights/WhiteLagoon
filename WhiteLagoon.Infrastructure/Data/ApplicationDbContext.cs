@@ -21,7 +21,7 @@ namespace WhiteLagoon.Infrastructure.Data
 
         public DbSet<Booking> Bookings { get; set; }
 
-        //wont create a new table, it will alter AspNetUser since ApplicationUser extends IdentityUser
+        //wont create a new table, it will alter AspNetUsers since ApplicationUser extends IdentityUser
         DbSet<ApplicationUser>? ApplicationUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
