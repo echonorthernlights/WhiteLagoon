@@ -40,3 +40,4 @@ jobs:
           login: "aelhassani"
           password: "Root__2023"
           platforms: linux/amd64,linux/arm64
+v
